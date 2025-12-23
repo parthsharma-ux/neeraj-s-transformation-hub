@@ -1,5 +1,6 @@
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, Pause } from "lucide-react";
 import transformationVideo1 from "@/assets/transformation-video-1.mp4";
 import transformationVideo2 from "@/assets/transformation-video-2.mp4";
 import transformationVideo3 from "@/assets/transformation-video-3.mp4";
@@ -32,6 +33,24 @@ const VideoCard = ({ video, name, duration, result, index }: {
   result: string;
   index: number;
 }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setIsPlaying(false);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -48,19 +67,32 @@ const VideoCard = ({ video, name, duration, result, index }: {
       {/* Card content */}
       <div className="relative bg-card rounded-2xl overflow-hidden p-4">
         {/* Video container */}
-        <div className="relative rounded-xl overflow-hidden aspect-[9/16] mb-4 bg-muted">
+        <div 
+          className="relative rounded-xl overflow-hidden aspect-[9/16] mb-4 bg-muted cursor-pointer"
+          onClick={togglePlay}
+        >
           <video
+            ref={videoRef}
             src={video}
             className="w-full h-full object-cover"
             muted
             loop
             playsInline
-            autoPlay
+            onEnded={handleVideoEnd}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm">
-              <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
+          
+          {/* Play/Pause overlay */}
+          <div 
+            className={`absolute inset-0 bg-background/40 flex items-center justify-center transition-opacity duration-300 ${
+              isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'
+            }`}
+          >
+            <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm transition-transform duration-200 hover:scale-110">
+              {isPlaying ? (
+                <Pause className="w-7 h-7 text-primary-foreground fill-current" />
+              ) : (
+                <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
+              )}
             </div>
           </div>
         </div>
