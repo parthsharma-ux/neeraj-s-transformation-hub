@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { MessageCircle, Instagram, Play } from "lucide-react";
-import trainerHero from "@/assets/trainer-hero.jpg";
+import neerajHero from "@/assets/neeraj-hero.jpg";
 
 const HeroSection = () => {
   const whatsappLink = "https://wa.me/919999999999?text=Hi%20Neeraj!%20I%20want%20to%20start%20my%20fitness%20transformation";
@@ -119,7 +119,7 @@ const HeroSection = () => {
             <div className="relative">
               <div className="relative w-72 h-96 md:w-80 md:h-[28rem] lg:w-96 lg:h-[32rem] rounded-2xl overflow-hidden border-2 border-primary/30 glow-effect-sm">
                 <img
-                  src={trainerHero}
+                  src={neerajHero}
                   alt="Neeraj Singh Pawar - Fitness Coach"
                   className="w-full h-full object-cover object-top"
                 />
