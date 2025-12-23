@@ -1,31 +1,77 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, ArrowRight } from "lucide-react";
-import transformation1 from "@/assets/transformation-1.jpg";
-import transformation2 from "@/assets/transformation-2.jpg";
-import transformation3 from "@/assets/transformation-3.jpg";
+import { ArrowRight, Instagram } from "lucide-react";
+
+// Replace these with your actual Instagram transformation post URLs
+const transformationPosts = [
+  {
+    url: "https://www.instagram.com/p/TRANSFORMATION1/",
+    name: "Rahul K.",
+    duration: "12 Weeks",
+    result: "Lost 15kg, Gained Muscle",
+  },
+  {
+    url: "https://www.instagram.com/p/TRANSFORMATION2/",
+    name: "Priya S.",
+    duration: "16 Weeks",
+    result: "Complete Body Recomposition",
+  },
+  {
+    url: "https://www.instagram.com/p/TRANSFORMATION3/",
+    name: "Amit R.",
+    duration: "20 Weeks",
+    result: "From Skinny to Muscular",
+  },
+];
+
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds: {
+        process: () => void;
+      };
+    };
+  }
+}
+
+const InstagramEmbed = ({ url }: { url: string }) => {
+  useEffect(() => {
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://www.instagram.com/embed.js";
+      script.async = true;
+      script.onload = () => {
+        if (window.instgrm) {
+          window.instgrm.Embeds.process();
+        }
+      };
+      document.body.appendChild(script);
+    }
+  }, [url]);
+
+  return (
+    <blockquote
+      className="instagram-media"
+      data-instgrm-captioned
+      data-instgrm-permalink={url}
+      data-instgrm-version="14"
+      style={{
+        background: "transparent",
+        border: 0,
+        borderRadius: "12px",
+        margin: 0,
+        maxWidth: "100%",
+        minWidth: "100%",
+        padding: 0,
+        width: "100%",
+      }}
+    />
+  );
+};
 
 const TransformationsSection = () => {
-  const transformations = [
-    {
-      image: transformation1,
-      name: "Rahul K.",
-      duration: "12 Weeks",
-      result: "Lost 15kg, Gained Muscle",
-    },
-    {
-      image: transformation2,
-      name: "Priya S.",
-      duration: "16 Weeks",
-      result: "Complete Body Recomposition",
-    },
-    {
-      image: transformation3,
-      name: "Amit R.",
-      duration: "20 Weeks",
-      result: "From Skinny to Muscular",
-    },
-  ];
-
   return (
     <section id="transformations" className="relative py-24 overflow-hidden">
       {/* Background */}
@@ -43,6 +89,7 @@ const TransformationsSection = () => {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 mb-6">
+            <Instagram className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary uppercase tracking-wider">
               Client Transformations
             </span>
@@ -57,50 +104,25 @@ const TransformationsSection = () => {
           <div className="section-divider mt-8" />
         </motion.div>
 
-        {/* Transformation Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {transformations.map((item, index) => (
+        {/* Transformation Cards with Instagram Embeds */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {transformationPosts.map((item, index) => (
             <motion.div
               key={item.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.15, duration: 0.6 }}
-              className="group relative"
+              className="group"
             >
-              <div className="card-premium rounded-2xl overflow-hidden transition-all duration-500 group-hover:scale-[1.02] group-hover:glow-effect-sm">
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={`${item.name} transformation`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-                  
-                  {/* Play button */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center animate-pulse-glow">
-                      <Play className="w-6 h-6 text-primary-foreground ml-1" />
-                    </div>
-                  </div>
-                  
-                  {/* Before/After labels */}
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="px-3 py-1 text-xs font-bold uppercase bg-muted/80 backdrop-blur-sm rounded-full">
-                      Before
-                    </span>
-                  </div>
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    <span className="px-3 py-1 text-xs font-bold uppercase bg-primary/80 backdrop-blur-sm rounded-full text-primary-foreground">
-                      After
-                    </span>
-                  </div>
+              <div className="card-premium rounded-2xl overflow-hidden p-4">
+                {/* Instagram Embed */}
+                <div className="rounded-xl overflow-hidden mb-4">
+                  <InstagramEmbed url={item.url} />
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="px-2">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-display text-xl font-bold">{item.name}</h3>
                     <span className="text-sm text-primary font-semibold">{item.duration}</span>
