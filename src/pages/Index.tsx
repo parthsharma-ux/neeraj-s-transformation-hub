@@ -5,6 +5,7 @@ import WhyTrainWithMeSection from "@/components/WhyTrainWithMeSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import SocialProofSection from "@/components/SocialProofSection";
 import InstagramFeedSection from "@/components/InstagramFeedSection";
+import FAQSection from "@/components/FAQSection";
 import FooterSection from "@/components/FooterSection";
 import StickyWhatsAppCTA from "@/components/StickyWhatsAppCTA";
 import { Helmet } from "react-helmet-async";
@@ -36,6 +37,7 @@ const Index = () => {
         <HowItWorksSection />
         <SocialProofSection />
         <InstagramFeedSection />
+        <FAQSection />
         <FooterSection />
         <StickyWhatsAppCTA />
       </main>
