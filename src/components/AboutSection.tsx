@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Award, Target, Users, Zap } from "lucide-react";
-import trainerWorkout from "@/assets/trainer-workout.jpg";
+import neerajMeditation from "@/assets/neeraj-meditation.jpg";
 
 const AboutSection = () => {
   const features = [
@@ -29,8 +29,8 @@ const AboutSection = () => {
               {/* Main image */}
               <div className="relative aspect-square max-w-md mx-auto rounded-2xl overflow-hidden border border-border glow-effect-sm">
                 <img
-                  src={trainerWorkout}
-                  alt="Neeraj Singh Pawar training"
+                  src={neerajMeditation}
+                  alt="Neeraj Singh Pawar"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
