@@ -1,39 +1,22 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Pause } from "lucide-react";
+import { ArrowRight, Play, Pause, Volume2, VolumeX } from "lucide-react";
 import transformationVideo1 from "@/assets/transformation-video-1.mp4";
 import transformationVideo2 from "@/assets/transformation-video-2.mp4";
 import transformationVideo3 from "@/assets/transformation-video-3.mp4";
 
 const transformations = [
-  {
-    video: transformationVideo1,
-    name: "Rahul K.",
-    duration: "12 Weeks",
-    result: "Lost 15kg, Gained Muscle",
-  },
-  {
-    video: transformationVideo2,
-    name: "Priya S.",
-    duration: "16 Weeks",
-    result: "Complete Body Recomposition",
-  },
-  {
-    video: transformationVideo3,
-    name: "Amit R.",
-    duration: "20 Weeks",
-    result: "From Skinny to Muscular",
-  },
+  { video: transformationVideo1 },
+  { video: transformationVideo2 },
+  { video: transformationVideo3 },
 ];
 
-const VideoCard = ({ video, name, duration, result, index }: {
+const VideoCard = ({ video, index }: {
   video: string;
-  name: string;
-  duration: string;
-  result: string;
   index: number;
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
@@ -44,6 +27,14 @@ const VideoCard = ({ video, name, duration, result, index }: {
         videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
   };
 
@@ -65,17 +56,16 @@ const VideoCard = ({ video, name, duration, result, index }: {
       </div>
       
       {/* Card content */}
-      <div className="relative bg-card rounded-2xl overflow-hidden p-4">
+      <div className="relative bg-card rounded-2xl overflow-hidden p-3">
         {/* Video container */}
         <div 
-          className="relative rounded-xl overflow-hidden aspect-[9/16] mb-4 bg-muted cursor-pointer"
+          className="relative rounded-xl overflow-hidden aspect-[9/16] bg-muted cursor-pointer"
           onClick={togglePlay}
         >
           <video
             ref={videoRef}
             src={video}
             className="w-full h-full object-cover"
-            muted
             loop
             playsInline
             onEnded={handleVideoEnd}
@@ -95,15 +85,20 @@ const VideoCard = ({ video, name, duration, result, index }: {
               )}
             </div>
           </div>
-        </div>
 
-        {/* Content */}
-        <div className="px-2">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-display text-xl font-bold">{name}</h3>
-            <span className="text-sm text-primary font-semibold">{duration}</span>
-          </div>
-          <p className="text-muted-foreground">{result}</p>
+          {/* Mute/Unmute button */}
+          {isPlaying && (
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 hover:bg-background/90"
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5 text-foreground" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-foreground" />
+              )}
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
@@ -146,7 +141,7 @@ const TransformationsSection = () => {
         {/* Transformation Video Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {transformations.map((item, index) => (
-            <VideoCard key={item.name} {...item} index={index} />
+            <VideoCard key={index} video={item.video} index={index} />
           ))}
         </div>
 
