@@ -44,62 +44,49 @@ const VideoCard = ({ video, index }: {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.15, duration: 0.6 }}
-      className="group relative"
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="w-full"
     >
-      {/* Animated rotating border */}
-      <div className="absolute -inset-[2px] rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 animate-spin-slow bg-[conic-gradient(from_0deg,hsl(var(--primary)),hsl(var(--primary)/0.2),hsl(var(--primary)),hsl(var(--primary)/0.2),hsl(var(--primary)))]" />
-      </div>
-      
-      {/* Card content */}
-      <div className="relative bg-card rounded-2xl overflow-hidden p-3">
-        {/* Video container */}
-        <div 
-          className="relative rounded-xl overflow-hidden aspect-[9/16] bg-muted cursor-pointer"
-          onClick={togglePlay}
-        >
-          <video
-            ref={videoRef}
-            src={video}
-            className="w-full h-full object-cover"
-            loop
-            playsInline
-            onEnded={handleVideoEnd}
-          />
-          
-          {/* Play/Pause overlay */}
-          <div 
-            className={`absolute inset-0 bg-background/40 flex items-center justify-center transition-opacity duration-300 ${
-              isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'
-            }`}
-          >
-            <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm transition-transform duration-200 hover:scale-110">
-              {isPlaying ? (
-                <Pause className="w-7 h-7 text-primary-foreground fill-current" />
-              ) : (
-                <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
-              )}
-            </div>
+      <div 
+        className="relative rounded-xl overflow-hidden aspect-[9/16] bg-card border border-border/50 shadow-lg cursor-pointer group"
+        onClick={togglePlay}
+      >
+        <video
+          ref={videoRef}
+          src={video}
+          className="w-full h-full object-cover"
+          loop
+          playsInline
+          onEnded={handleVideoEnd}
+        />
+        
+        {/* Play/Pause overlay */}
+        <div className={`absolute inset-0 flex items-center justify-center bg-background/30 transition-opacity duration-300 ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+          <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm">
+            {isPlaying ? (
+              <Pause className="w-8 h-8 text-primary-foreground" />
+            ) : (
+              <Play className="w-8 h-8 text-primary-foreground ml-1" />
+            )}
           </div>
-
-          {/* Mute/Unmute button */}
-          {isPlaying && (
-            <button
-              onClick={toggleMute}
-              className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 hover:bg-background/90"
-            >
-              {isMuted ? (
-                <VolumeX className="w-5 h-5 text-foreground" />
-              ) : (
-                <Volume2 className="w-5 h-5 text-foreground" />
-              )}
-            </button>
-          )}
         </div>
+
+        {/* Mute/Unmute button */}
+        {isPlaying && (
+          <button
+            onClick={toggleMute}
+            className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 hover:bg-background/90"
+          >
+            {isMuted ? (
+              <VolumeX className="w-5 h-5 text-foreground" />
+            ) : (
+              <Volume2 className="w-5 h-5 text-foreground" />
+            )}
+          </button>
+        )}
       </div>
     </motion.div>
   );
