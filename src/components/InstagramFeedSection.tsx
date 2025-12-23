@@ -1,68 +1,100 @@
-import { useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Instagram, ExternalLink } from "lucide-react";
+import { Instagram, ExternalLink, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import transformationVideo1 from "@/assets/transformation-video-1.mp4";
+import transformationVideo2 from "@/assets/transformation-video-2.mp4";
+import transformationVideo3 from "@/assets/transformation-video-3.mp4";
 
-// Add your actual Instagram post URLs here
-const instagramPostUrls = [
-  "https://www.instagram.com/p/EXAMPLE1/",
-  "https://www.instagram.com/p/EXAMPLE2/",
-  "https://www.instagram.com/p/EXAMPLE3/",
-  "https://www.instagram.com/p/EXAMPLE4/",
-  "https://www.instagram.com/p/EXAMPLE5/",
-  "https://www.instagram.com/p/EXAMPLE6/",
+const videos = [
+  { video: transformationVideo1 },
+  { video: transformationVideo2 },
+  { video: transformationVideo3 },
 ];
 
-const InstagramEmbed = ({ url }: { url: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const VideoCard = ({ video, index }: { video: string; index: number }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    // Load Instagram embed script
-    if (window.instgrm) {
-      window.instgrm.Embeds.process();
-    } else {
-      const script = document.createElement("script");
-      script.src = "https://www.instagram.com/embed.js";
-      script.async = true;
-      script.onload = () => {
-        if (window.instgrm) {
-          window.instgrm.Embeds.process();
-        }
-      };
-      document.body.appendChild(script);
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
     }
-  }, [url]);
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setIsPlaying(false);
+  };
 
   return (
-    <div ref={containerRef} className="instagram-embed-container">
-      <blockquote
-        className="instagram-media"
-        data-instgrm-captioned
-        data-instgrm-permalink={url}
-        data-instgrm-version="14"
-        style={{
-          background: "transparent",
-          border: 0,
-          borderRadius: "12px",
-          margin: 0,
-          maxWidth: "100%",
-          minWidth: "100%",
-          padding: 0,
-          width: "100%",
-        }}
-      />
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+      className="w-full group"
+    >
+      {/* Rotating border container */}
+      <div className="relative p-[2px] rounded-2xl overflow-hidden">
+        {/* Animated rotating gradient border */}
+        <div className="absolute inset-0 animate-spin-slow bg-[conic-gradient(from_0deg,hsl(var(--primary)),hsl(var(--primary)/0.2),hsl(var(--primary)),hsl(var(--primary)/0.2),hsl(var(--primary)))]" />
+        
+        {/* Card content */}
+        <div 
+          className="relative rounded-2xl overflow-hidden aspect-[9/16] bg-card cursor-pointer"
+          onClick={togglePlay}
+        >
+          <video
+            ref={videoRef}
+            src={video}
+            className="w-full h-full object-cover"
+            loop
+            playsInline
+            onEnded={handleVideoEnd}
+          />
+          
+          {/* Play/Pause overlay */}
+          <div className={`absolute inset-0 flex items-center justify-center bg-background/30 transition-opacity duration-300 ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+            <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm">
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-primary-foreground" />
+              ) : (
+                <Play className="w-8 h-8 text-primary-foreground ml-1" />
+              )}
+            </div>
+          </div>
+
+          {/* Mute/Unmute button */}
+          {isPlaying && (
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 hover:bg-background/90"
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5 text-foreground" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-foreground" />
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 };
-
-declare global {
-  interface Window {
-    instgrm?: {
-      Embeds: {
-        process: () => void;
-      };
-    };
-  }
-}
 
 const InstagramFeedSection = () => {
   return (
@@ -94,19 +126,10 @@ const InstagramFeedSection = () => {
           <div className="section-divider mt-8" />
         </motion.div>
 
-        {/* Instagram Embeds Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {instagramPostUrls.map((url, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="w-full"
-            >
-              <InstagramEmbed url={url} />
-            </motion.div>
+        {/* Video Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {videos.map((item, index) => (
+            <VideoCard key={index} video={item.video} index={index} />
           ))}
         </div>
 
