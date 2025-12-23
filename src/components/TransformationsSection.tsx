@@ -48,45 +48,52 @@ const VideoCard = ({ video, index }: {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
-      className="w-full"
+      className="w-full group"
     >
-      <div 
-        className="relative rounded-xl overflow-hidden aspect-[9/16] bg-card border border-border/50 shadow-lg cursor-pointer group"
-        onClick={togglePlay}
-      >
-        <video
-          ref={videoRef}
-          src={video}
-          className="w-full h-full object-cover"
-          loop
-          playsInline
-          onEnded={handleVideoEnd}
-        />
+      {/* Rotating border container */}
+      <div className="relative p-[2px] rounded-2xl overflow-hidden">
+        {/* Animated rotating gradient border */}
+        <div className="absolute inset-0 animate-spin-slow bg-[conic-gradient(from_0deg,hsl(var(--primary)),hsl(var(--primary)/0.2),hsl(var(--primary)),hsl(var(--primary)/0.2),hsl(var(--primary)))]" />
         
-        {/* Play/Pause overlay */}
-        <div className={`absolute inset-0 flex items-center justify-center bg-background/30 transition-opacity duration-300 ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-          <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm">
-            {isPlaying ? (
-              <Pause className="w-8 h-8 text-primary-foreground" />
-            ) : (
-              <Play className="w-8 h-8 text-primary-foreground ml-1" />
-            )}
+        {/* Card content */}
+        <div 
+          className="relative rounded-2xl overflow-hidden aspect-[9/16] bg-card cursor-pointer"
+          onClick={togglePlay}
+        >
+          <video
+            ref={videoRef}
+            src={video}
+            className="w-full h-full object-cover"
+            loop
+            playsInline
+            onEnded={handleVideoEnd}
+          />
+          
+          {/* Play/Pause overlay */}
+          <div className={`absolute inset-0 flex items-center justify-center bg-background/30 transition-opacity duration-300 ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+            <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm">
+              {isPlaying ? (
+                <Pause className="w-8 h-8 text-primary-foreground" />
+              ) : (
+                <Play className="w-8 h-8 text-primary-foreground ml-1" />
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Mute/Unmute button */}
-        {isPlaying && (
-          <button
-            onClick={toggleMute}
-            className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 hover:bg-background/90"
-          >
-            {isMuted ? (
-              <VolumeX className="w-5 h-5 text-foreground" />
-            ) : (
-              <Volume2 className="w-5 h-5 text-foreground" />
-            )}
-          </button>
-        )}
+          {/* Mute/Unmute button */}
+          {isPlaying && (
+            <button
+              onClick={toggleMute}
+              className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/70 flex items-center justify-center backdrop-blur-sm transition-opacity duration-300 hover:bg-background/90"
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5 text-foreground" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-foreground" />
+              )}
+            </button>
+          )}
+        </div>
       </div>
     </motion.div>
   );
