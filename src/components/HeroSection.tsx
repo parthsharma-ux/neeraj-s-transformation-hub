@@ -17,7 +17,7 @@ const HeroSection = () => {
       {/* Noise texture overlay */}
       <div className="absolute inset-0 bg-noise pointer-events-none" />
 
-      <div className="container relative z-10 px-4 py-20">
+      <div className="container relative z-10 px-4 pt-24 pb-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <motion.div

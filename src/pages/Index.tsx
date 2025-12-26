@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import TransformationsSection from "@/components/TransformationsSection";
@@ -27,14 +28,20 @@ const Index = () => {
         <link rel="canonical" href="https://neerajsinghpawarfitness.com" />
       </Helmet>
       
+      <Navbar />
+      
       <main className="relative overflow-hidden">
         {/* Noise overlay for entire page */}
         <div className="fixed inset-0 bg-noise pointer-events-none z-0" />
         
-        <HeroSection />
+        <div id="home">
+          <HeroSection />
+        </div>
         <AboutSection />
         <TransformationsSection />
-        <WhyTrainWithMeSection />
+        <div id="why-me">
+          <WhyTrainWithMeSection />
+        </div>
         <HowItWorksSection />
         <SocialProofSection />
         <InstagramFeedSection />
