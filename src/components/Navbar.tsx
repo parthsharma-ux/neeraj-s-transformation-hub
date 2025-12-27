@@ -3,10 +3,10 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "#hero" },
   { label: "About", href: "#about" },
   { label: "Transformations", href: "#transformations" },
-  { label: "Why Me", href: "#why-me" },
+  { label: "Why Me", href: "#why" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "AI Coach", href: "#ai-coach" },
   { label: "FAQ", href: "#faq" },
@@ -44,10 +44,10 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <a
-            href="#home"
+            href="#hero"
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection("#home");
+              scrollToSection("#hero");
             }}
             className="text-xl md:text-2xl font-bold text-primary"
           >
